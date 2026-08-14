@@ -3,27 +3,56 @@ package gt.edu.umg.mapper;
 import java.time.LocalDate;
 import java.time.Period;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
 import gt.edu.umg.core.entities.Paciente;
 import gt.edu.umg.core.entities.Dtos.Request.PacienteRequestDto;
 import gt.edu.umg.core.entities.Dtos.Response.PacienteResponseDto;
 
-@Mapper(componentModel = "spring")
-public interface PacienteMapper {
+@Component
+public class PacienteMapper {
 
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "activo", constant = "true")
-	Paciente toEntity(PacienteRequestDto dto);
+    public Paciente toEntity(PacienteRequestDto dto) {
+        Paciente paciente = new Paciente();
+        paciente.setNombres(dto.nombres());
+        paciente.setApellidos(dto.apellidos());
+        paciente.setTipoIdentificacion(dto.tipoIdentificacion());
+        paciente.setNumeroIdentificacion(dto.numeroIdentificacion());
+        paciente.setSexoBiologico(dto.sexoBiologico());
+        paciente.setTelefono(dto.telefono());
+        paciente.setCorreo(dto.correo());
+        paciente.setDireccion(dto.direccion());
+        paciente.setContactoEmergencia(dto.contactoEmergencia());
+        paciente.setTelefonoEmergencia(dto.telefonoEmergencia());
+        paciente.setFechaNacimiento(dto.fechaNacimiento());
+        paciente.setActivo(true);
+        return paciente;
+    }
 
-	@Mapping(target = "edad", expression = "java(calcularEdad(entity.getFechaNacimiento()))")
-	PacienteResponseDto toDto(Paciente entity);
+    public PacienteResponseDto toDto(Paciente entity) {
+        return new PacienteResponseDto(
+                entity.getId(),
+                entity.getNombres(),
+                entity.getApellidos(),
+                entity.getTipoIdentificacion(),
+                entity.getNumeroIdentificacion(),
+                entity.getSexoBiologico(),
+                entity.getTelefono(),
+                entity.getCorreo(),
+                entity.getDireccion(),
+                entity.getContactoEmergencia(),
+                entity.getTelefonoEmergencia(),
+                entity.getFechaNacimiento(),
+                calcularEdad(entity.getFechaNacimiento()),
+                entity.getActivo(),
+                entity.getCreadoEn(),
+                entity.getActualizadoEn());
+    }
 
-	default Integer calcularEdad(LocalDate fechaNacimiento) {
-		if (fechaNacimiento == null) {
-			return null;
-		}
-		return Period.between(fechaNacimiento, LocalDate.now()).getYears();
-	}
+    private Integer calcularEdad(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null) {
+            return null;
+        }
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    }
 }
