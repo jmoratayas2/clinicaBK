@@ -2,6 +2,7 @@ package gt.edu.umg.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,21 +32,25 @@ public class HistorialMedicoController {
     }
 
     @GetMapping("/pacientes/{pacienteId}/historial")
+    @PreAuthorize("hasAuthority('PACIENTE_READ')")
     public HistorialMedicoResponse obtener(@PathVariable Long pacienteId) {
         return mapper.toHistorial(service.historial(pacienteId));
     }
 
     @PutMapping("/pacientes/{pacienteId}/historial")
+    @PreAuthorize("hasAuthority('PACIENTE_UPDATE')")
     public HistorialMedicoResponse guardar(@PathVariable Long pacienteId, @Valid @RequestBody HistorialMedicoRequest request) {
         return mapper.toHistorial(service.guardarHistorial(pacienteId, request));
     }
 
     @GetMapping("/historiales-medicos")
+    @PreAuthorize("hasAuthority('PACIENTE_READ')")
     public List<HistorialMedicoResponse> listar() {
         return historialMedicoRepository.findAll().stream().map(mapper::toHistorial).toList();
     }
 
     @GetMapping("/historiales-medicos/{id}")
+    @PreAuthorize("hasAuthority('PACIENTE_READ')")
     public HistorialMedicoResponse obtenerPorId(@PathVariable Long id) {
         return mapper.toHistorial(service.historialPorId(id));
     }

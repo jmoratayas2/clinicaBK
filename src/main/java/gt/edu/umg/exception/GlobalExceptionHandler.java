@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.CONFLICT, ex.getMessage(), List.of());
     }
 
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<ApiError> invalidParam(InvalidParameterException ex) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), List.of());
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> dataIntegrity(DataIntegrityViolationException ex) {
         return build(HttpStatus.CONFLICT, "La operacion viola una restriccion de datos", List.of());

@@ -5,12 +5,13 @@
 - OpenAPI UI comes from `springdoc-openapi-starter-webmvc-ui`.
 
 ## Commands
-- From `apirest-demo/`, use the Maven wrapper: `./mvnw.cmd test` on Windows, `./mvnw test` elsewhere.
+- From `clinicaBK/`, use the Maven wrapper: `./mvnw.cmd test` on Windows, `./mvnw test` elsewhere.
 - Run locally with `./mvnw.cmd spring-boot:run`.
 - Focus tests with Surefire syntax, e.g. `./mvnw.cmd -Dtest=ApiDemoApplicationTests test` or `./mvnw.cmd -Dtest=ApiDemoApplicationTests#contextLoads test`.
+- Ensure Maven runs on JDK 21 (`mvnw.cmd -v`); Java 8 reports misleading syntax errors on records/text blocks.
 
 ## Runtime Defaults
-- `application.properties` connects directly to local MySQL: `jdbc:mysql://localhost:3306/Clínica`, user `root`.
+- `application.properties` connects directly to local MySQL: `jdbc:mysql://localhost:3306/clinica`, user `root`.
 - Schema is managed by Hibernate with `spring.jpa.hibernate.ddl-auto=update`; no Flyway/Liquibase migration config is present.
 - No Docker, CI workflow, formatter, or lint config is present in the repo.
 
