@@ -3,6 +3,7 @@ package gt.edu.umg.config;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -103,14 +104,20 @@ public class SecurityConfig {
         };
     }
 
+    @Value("${cors.allowed-origins:http://localhost:4200}")
+    private String allowedOrigins;
+
     /**
-     * Configuración CORS mínima para el frontend Angular en localhost:4200.
-     * Cambio necesario para que el navegador permita peticiones cross-origin.
+     * Configuración CORS para el frontend (configurable por variable de entorno).
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        List<String> origins = java.util.Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .toList();
+        config.setAllowedOrigins(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(false);
@@ -119,3 +126,4 @@ public class SecurityConfig {
         return source;
     }
 }
+
